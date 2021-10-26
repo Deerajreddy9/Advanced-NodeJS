@@ -1,0 +1,59 @@
+------WebKitFormBoundaryclbuB7BW3f1VcqJf
+Content-Disposition: form-data; name="upload-file"; filename="server.ts"
+Content-Type: video/vnd.dlna.mpeg-tts
+
+import cors from "cors";
+import express from "express";
+
+import phoneRouter from "./routes/verifyPhone";
+import emailRouter from "./routes/verifyEmail";
+import usernameRouter from "./routes/verifyUsername";
+import companyNameRouter from "./routes/verifyCompany";
+import cityRouter from "./routes/verifyCity";
+import countryRouter from "./routes/verifyCountry";
+import passwordRouter from "./routes/verifyPass";
+import confirmPassRouter from "./routes/verifyConfirmPass";
+import loginRouter from "./routes/login";
+import registerRouter from "./routes/registerCompany";
+import mongoRouter from "./routes/mongo";
+import mongoose from "mongoose";
+import config from "./config";
+
+const app: express.Application = express();
+const hostname: string = "localhost";
+const port: number = config.app.port || 3000;
+
+app.use(cors());
+app.use(express.json());
+
+const uri = config.mongoDB;
+mongoose.connect(uri);
+const db = mongoose.connection;
+db.on("error", (err) => {
+  console.log(err);
+});
+db.once("open", () => {
+  console.log("DB connection Established");
+});
+
+app.use("/phone", phoneRouter);
+app.use("/email", emailRouter);
+app.use("/username", usernameRouter);
+app.use("/name", companyNameRouter);
+app.use("/city", cityRouter);
+app.use("/country", countryRouter);
+app.use("/password", passwordRouter);
+app.use("/confirmPass", confirmPassRouter);
+app.use("/login", loginRouter);
+app.use("/register", registerRouter);
+
+app.get("/", (req: express.Request, res: express.Response) => {
+  res.status(200).send(`<h3 style="color:blue"> Hello Guys </h3> `);
+});
+app.use("/mongo", mongoRouter);
+
+app.listen(port, hostname, () => {
+  console.log("RUnning");
+});
+
+------WebKitFormBoundaryclbuB7BW3f1VcqJf--

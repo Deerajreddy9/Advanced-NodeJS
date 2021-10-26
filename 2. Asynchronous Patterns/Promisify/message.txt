@@ -1,0 +1,1 @@
+Promisify basically used to convert a method that returns responses using a callback function to return responses in a promise object. 
